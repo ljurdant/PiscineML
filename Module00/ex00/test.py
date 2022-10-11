@@ -25,5 +25,5 @@ v1 = Vector([[1, 7, 8]])
 v2 = Vector([[2, 9 , 1]])
 print(repr(v1+v2))
 print(v1.dot(v2))
-
+print(v1.T().dot(v2.T()))
 

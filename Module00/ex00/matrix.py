@@ -88,3 +88,4 @@ class Vector(Matrix):
             return TypeError
         if not self.shape == v.shape:
             return AttributeError("dot product can only be made between vectors of the same shape")
+        return sum([sum([a*b for a,b in zip(rowa, rowb)]) for rowa , rowb in zip(self.data, v.data)])
