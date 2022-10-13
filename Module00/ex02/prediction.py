@@ -14,7 +14,10 @@ def simple_predict(x, theta):
     """
     if not isinstance(x, np.ndarray) or not isinstance(theta, np.ndarray):
         return None
-    if len(x) == 0 or not len(x.shape) == 1 or not theta.shape == (2,):
+    if len(x) == 0 or not (theta.shape == (2,) or theta.shape == (2,1)):
         return None
-
+    if len(x.shape) > 1:
+        if x.shape[1] > 1:
+            return None
+     
     return (theta[1]*x+theta[0])
