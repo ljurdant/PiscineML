@@ -23,7 +23,12 @@ def plot_with_loss(x, y, theta):
     else:
         y_hat = predict_(x, theta)
         plt.plot(x, y, "o",x, y_hat)
-        plt.fill_between(x, y, y_hat)
+        
+        #Plotting difference lines
+        for i in range(len(x)):
+            plt.plot([x[i],x[i]],[y[i],y_hat[i]], color="red", linestyle="dashed")
+
+        #Print loss
         loss = loss_(y, y_hat)
         plt.title("Cost: "+str(loss))
         plt.show()
