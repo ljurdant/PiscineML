@@ -2,7 +2,6 @@ import numpy as np
 
 def shape_check(y, y_hat):
     try:
-
         np.reshape(y_hat, (max(y_hat.shape), 1))
         np.reshape(y, (max(y.shape), 1))
     except:

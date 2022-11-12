@@ -20,6 +20,7 @@ class Matrix:
             if not isinstance(data[0], int) or not isinstance(data[1], int):
                 raise TypeError(type(data))
             self.data = [[0 for _ in range(data[1])] for _ in range(data[0])]
+            self.shape = data
         else:
             raise TypeError(type(data))
     
@@ -54,7 +55,12 @@ class Matrix:
         return (type(self)(new_data))
     
     def __rtruediv__(self, rhs):
-        return self / (1 / rhs)
+        if not isinstance(rhs, int) and not isinstance(rhs, float):
+            raise TypeError(type(rhs))
+        if rhs == 0:
+            raise DivisionByZero
+        new_data = [[rhs / x  for x in row] for row in self.data]
+        return (type(self)(new_data))
 
     def __mul__(self, rhs):
         if not isinstance(rhs, int) and not isinstance(rhs, float):
