@@ -1,10 +1,7 @@
 
-import sys, os, numpy as np
+import numpy as np
 
-dirname = os.path.dirname(os.path.abspath(__file__))[:-4]+"ex00"
-sys.path.append(dirname)
 
-from gradient import predict_
 
 def simple_gradient(x, y, theta):
     """Computes a gradient vector from three non-empty numpy.array, without any for loop.
@@ -27,8 +24,6 @@ def simple_gradient(x, y, theta):
     except:
         return None
     else:
-        # y_hat = predict_(x_prime, theta)
         x_prime = np.insert(x,0,1,axis=1)
-        # x_prime = x_prime * theta
         
-        return 1 / max(x.shape) * np.transpose(x_prime) * (x_prime - y)
+        return 1 / max(x.shape) * np.matmul(x_prime.transpose(),np.matmul(x_prime,theta) - y)
