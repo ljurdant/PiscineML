@@ -1,12 +1,9 @@
 import sys, os, numpy as np
 
-dirname_predict = os.path.dirname(os.path.abspath(__file__))[:-4]+"ex00"
 dirname_vec_gradient =  os.path.dirname(os.path.abspath(__file__))[:-4]+"ex01"
-sys.path.append(dirname_predict)
 sys.path.append(dirname_vec_gradient)
 
 from vec_gradient import simple_gradient
-from gradient import predict_
 
 
 def fit_(x, y, theta, alpha, max_iter):
@@ -25,7 +22,7 @@ def fit_(x, y, theta, alpha, max_iter):
     Raises:
         This function should not raise any Exception.
     """
-    
+    new_theta = theta
     for _ in range(max_iter):
-        y_hat = predict_(x, theta)
-        theta = vec_gradient()
+        new_theta = new_theta - alpha * simple_gradient(x, y, new_theta)
+    return new_theta

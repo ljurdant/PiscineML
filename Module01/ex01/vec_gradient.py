@@ -1,8 +1,6 @@
 
 import numpy as np
 
-
-
 def simple_gradient(x, y, theta):
     """Computes a gradient vector from three non-empty numpy.array, without any for loop.
     The three arrays must have compatible shapes.
