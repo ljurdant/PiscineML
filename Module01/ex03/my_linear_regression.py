@@ -1,4 +1,5 @@
 import sys, os, numpy as np
+import matplotlib.pyplot as plt
 
 dirname_fit = os.path.dirname(os.path.abspath(__file__))[:-4]+"ex02"
 sys.path.append(dirname_fit)
@@ -20,9 +21,11 @@ class MyLinearRegression():
 		self.thetas = thetas
 	
 	def fit_(self, x, y):
-		new_theta =  fit_(x, y, self.thetas, self.alpha, self.max_iter)
-		if isinstance( new_theta, np.ndarray):
+		new_theta = fit_(x, y, self.thetas, self.alpha, self.max_iter)
+		if isinstance(new_theta, np.ndarray):
 			self.thetas = new_theta
+			J = []
+
 	
 	def predict_(self, x):
 		return predict_(x, self.thetas)
@@ -32,3 +35,4 @@ class MyLinearRegression():
 	
 	def loss_(self, y, y_hat):
 		return loss_(y, y_hat)
+	

@@ -15,8 +15,8 @@ def loss_elem_(y, y_hat):
         This function should not raise any Exception.
     """
     try:
-        np.reshape(y_hat, (max(y_hat.shape), 1))
-        np.reshape(y, (max(y.shape), 1))
+        y_hat = np.reshape(y_hat, (max(y_hat.shape), 1))
+        y = np.reshape(y, (max(y.shape), 1))
     except:
         return None
     else:
