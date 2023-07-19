@@ -4,7 +4,7 @@ from add_intercept import add_intercept
 
 def predict_(x, theta):
     """Computes the vector of prediction y_hat from two non-empty numpy.array.
-    Args:
+    Args:   
         x: has to be an numpy.array, a vector of dimension m * 1.
         theta: has to be an numpy.array, a vector of dimension 2 * 1.
     Returns:

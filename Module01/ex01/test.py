@@ -9,7 +9,7 @@ print(simple_gradient(x, y, theta1))
 # Output:
 # array([[-19.0342574], [-586.66875564]])
 # Example 1:
-# theta2 = np.array([1, -0.4]).reshape((-1, 1))
-# simple_gradient(x, y, theta2)
+theta2 = np.array([1, -0.4]).reshape((-1, 1))
+print(simple_gradient(x, y, theta2))
 # Output:
 # array([[-57.86823748], [-2230.12297889]])
