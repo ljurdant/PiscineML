@@ -20,7 +20,7 @@ def gradient(x, y, theta):
 
     try:
         x_prime = np.insert(x,0,1,axis=1)
-        return 1 / max(x.shape) * np.matmul(x_prime.transpose(),np.matmul(x_prime,theta) - y)
+        return 1 / x.shape[0] * np.matmul(x_prime.transpose(),np.matmul(x_prime, theta) - y)
     except Exception as err:
         print(err, file=sys.stderr)
         return None

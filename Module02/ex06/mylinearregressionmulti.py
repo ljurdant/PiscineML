@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 
-class MyLinearRegression():
+class MyLinearRegressionMulti():
 	"""
 		Description:
 		My personnal linear regression class to fit like a boss.
@@ -135,4 +135,7 @@ class MyLinearRegression():
 		J_elem = self.loss_elem_(y, y_hat)
 		if not isinstance(J_elem, type(None)):
 			return np.mean(J_elem) / 2
+		
+	def mse_(y, y_hat):
+		return np.mean((y_hat - y)**2)
 	

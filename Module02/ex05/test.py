@@ -5,7 +5,7 @@ Y = np.array([[23.], [48.], [218.]])
 mylr = MyLR([[1.], [1.], [1.], [1.], [1]])
 # Example 0:
 y_hat = mylr.predict_(X)
-print(y_hat)
+print("y_hat = ",y_hat)
 # Output:
 # array([[8.], [48.], [323.]])
 
@@ -22,9 +22,7 @@ print(mylr.loss_(Y, y_hat))
 # Example 3:
 mylr.alpha = 1.6e-4
 mylr.max_iter = 200000
-print(mylr.max_iter)
 mylr.fit_(X, Y)
-print(mylr.thetas)
 # Output:
 # array([[18.188..], [2.767..], [-0.374..], [1.392..], [0.017..]])
 
