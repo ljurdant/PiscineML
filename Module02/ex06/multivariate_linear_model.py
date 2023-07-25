@@ -29,19 +29,19 @@ max_iter = 100000
 lRUni = MyLinearRegressionUni(thetas, alpha, max_iter)
 lRUni.fit_(age, sell_price)
 ageModel = lRUni.predict_(age)
-# plot(age, sell_price, ageModel, "age")
+plot(age, sell_price, ageModel, "age")
 print("Age mse: ", lRUni.mse_(sell_price, ageModel))
 
-# #Thrust
+#Thrust
 lRUni.thetas = np.array([[1.0], [7.0]])
 lRUni.max_iter = 100000
 lRUni.alpha = 0.0001
 lRUni.fit_(thrust, sell_price)
 thrustModel = lRUni.predict_(thrust)
-# plot(thrust, sell_price, thrustModel, "thrust")
+plot(thrust, sell_price, thrustModel, "thrust")
 print("Thrust mse: ", lRUni.mse_(sell_price, thrustModel))
 
-# #Terameters
+#Terameters
 lRUni.thetas = np.array([[1.0], [-2]])
 lRUni.max_iter = 100000
 lRUni.alpha = 0.0001
@@ -52,8 +52,14 @@ print("Terameters mse: ", lRUni.mse_(sell_price, terametersModel))
 
 #Multivariate
 Xdata = np.array(data[["Age","Thrust_power","Terameters"]])
-lRMulti = MyLinearRegressionMulti([[1.0], [1.0], [1.0], [1.0]], 1e-4, 600000)
+thetas = np.array([[1.0], [1.0], [1.0], [1.0]])
+
+lRMulti = MyLinearRegressionMulti(thetas, 0.00005, 600000)
+print(lRMulti.mse_(Xdata, sell_price))
 lRMulti.fit_(Xdata, sell_price)
 print("Multi thetas = ", lRMulti.thetas)
 multiModel = lRMulti.predict_(Xdata)
+print(lRMulti.mse_(Xdata, sell_price))
 plot(age, sell_price, multiModel, "age")
+plot(thrust, sell_price, multiModel, "thrust")
+plot(terameters, sell_price, multiModel, "terameters")
