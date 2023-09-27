@@ -1,8 +1,11 @@
 import numpy as np
 from sigmoid import sigmoid_
+from log_pred import logistic_predict_
 
-def h(theta, x_row):
-    return sigmoid_(theta*x_row)
+# def h(theta, x):
+    # x = x.reshape(-1, 1)
+    # print(theta*x)
+    # return sigmoid_(theta*x)
 
 def log_gradient(x, y, theta):
     """Computes a gradient vector from three non-empty numpy.ndarray, with a for-loop. The three arrays must have compatiblArgs:
@@ -17,10 +20,13 @@ def log_gradient(x, y, theta):
         This function should not raise any Exception.
     """
 
+    try:
+        J = sum([(logistic_predict_(x[i].reshape(1,-1), theta) - y[i])
+                        for i in range(y.shape[0])]) / x.shape[0]
+        for j in range(1, theta.shape[0]):
+            J = np.append(J, sum([(logistic_predict_(x[i].reshape(1,-1), theta) - y[i])*x[i][j - 1]
+                        for i in range(y.shape[0])]) / x.shape[0], axis=1)
+        return J
+    except:
+        return None
     
-    result = np.array([[np.mean(h(theta, x[0]) - y[0])]])
-    print("x[0] = ", x[0])
-    for x_row, y_row in zip(x, y):
-        print(x_row, np.mean(h(theta, x_row) - y_row*x_row))
-        np.append(result, np.mean(h(theta, x_row) - y_row*x_row))
-    return result

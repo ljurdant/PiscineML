@@ -26,7 +26,7 @@ def simple_gradient(x, y, theta):
         np.reshape(theta, (2,1))
     except:
         return None
-    else:
+    else:   
         y_hat = predict_(x, theta)
         J0 = np.mean(y_hat - y)
         J1 = np.mean((y_hat - y)*x)
