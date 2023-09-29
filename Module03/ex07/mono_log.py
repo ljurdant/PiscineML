@@ -1,7 +1,34 @@
 import numpy as np
 import pandas as pd
 import sys
+import matplotlib.pyplot as plt
+
 from my_logistic_regression import MyLogisticRegression
+
+def zscore(x):
+    """Computes the normalized version of a non-empty numpy.ndarray using the z-score standardization.
+    Args:
+        x: has to be an numpy.ndarray, a vector.
+    Returns:
+        x' as a numpy.ndarray.
+        None if x is a non-empty numpy.ndarray or not a numpy.ndarray.
+    Raises:
+        This function shouldn't raise any Exception.
+    """
+    if np.mean(x) and np.std(x):
+        return (x - np.mean(x)) / np.std(x)
+
+def minmax(x):
+    """Computes the normalized version of a non-empty numpy.ndarray using the min-max standardization.
+    Args:
+        x: has to be an numpy.ndarray, a vector.
+    Returns:
+        x' as a numpy.ndarray.
+        None if x is a non-empty numpy.ndarray or not a numpy.ndarray.
+    Raises:
+        This function shouldn't raise any Exception.
+    """    
+    return (x - np.min(x)) / (np.max(x) - np.min(x))
 
 def data_spliter(x, y, proportion):
     try:
@@ -24,7 +51,7 @@ def parse_zipcode():
     if len(sys.argv) <= 1:
         raise Exception("missing argument")
 
-    valid_zips = ["1", "2", "3", "4"]
+    valid_zips = ["0", "1", "2", "3"]
 
     zip_arg = sys.argv[1]
 
@@ -54,18 +81,39 @@ if (zipcode != -1):
     y = np.array(y.astype({"Origin": "int"})).reshape(-1, 1)
 
     x_train, x_test, y_train, y_test = data_spliter(x, y, 0.5)
+    # print(zscore(x_train[:,0]))
+    # x_train = np.concatenate((minmax(x_train[:,0]).reshape(-1,1), minmax(x_train[:,1]).reshape(-1,1), (x_train[:,2]).reshape(-1,1)), axis=1)
+    # x_train = minmax(x_train)
+    # print(x_train)
+    thetas = np.array([[10.0],[1],[1],[1]])
 
-    # thetas = np.append([10.0],np.random.uniform(-1,1,3)).reshape(-1, 1)
-    thetas = np.array([[11.03593032],[-0.06548079],[ -0.01847231],[ 3.08083253]])
-    myLr = MyLogisticRegression(thetas, max_iter=10000)
+    myLr = MyLogisticRegression(thetas, max_iter=100000)
     myLr.fit_(x_train, y_train.reshape(-1, 1))
     print("Thetas = ",myLr.theta)
+    # print(x_train)
     print("Loss = ",myLr.loss_(x_test, y_test.reshape(-1, 1)))
+
     y_hat = myLr.predict_(x_test)
-    # print(y_test.astype(int) == y_hat.astype(int))
     count = 0
+    # print(y_hat)
+    y_hat = y_hat >= 0.5
     for y_pred, y_true in zip(y_hat, y_test):
-        y_pred = round(y_pred[0])
-        count+=(y_pred == y_true)
+        count+=(y_pred[0] == y_true)
     accuracy = count / y_test.shape[0]
+
+    pred_data = x_test[y_hat[:,0]]
+    other_data = x_test[y_hat[:,0] == False]
     print("Accuracy = "+str(round(accuracy, 4)*100)+"%")
+    fig, axs = plt.subplots(2,2)
+    axs[0,0].scatter(other_data[:,0],other_data[:,1])
+    axs[0,0].scatter(pred_data[:,0],pred_data[:,1])
+    axs[0,0].set_ylabel("height")
+    axs[1,0].scatter(other_data[:,0], other_data[:,2])
+    axs[1,0].scatter(pred_data[:,0],pred_data[:,2])
+    axs[1,0].set_ylabel("bone_density")
+    axs[1,0].set_xlabel("weight")
+    axs[1,1].scatter(other_data[:,1], other_data[:,2])
+    axs[1,1].scatter(pred_data[:,1], pred_data[:,2])
+    axs[1,1].set_xlabel("height")
+    
+    plt.show()

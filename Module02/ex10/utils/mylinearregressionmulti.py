@@ -67,11 +67,15 @@ class MyLinearRegressionMulti():
 			print(err, file=sys.stderr)
 			return None
 
+		mse = self.mse_(x,y)
 		#Fitting
 		for _ in range(self.max_iter):
 			deltaJ = self.gradient(x, y)
 			thetas = self.thetas - self.alpha * deltaJ
 			self.thetas = thetas
+			if self.mse_(x,y) > mse:
+				break
+		
 		return self.thetas
 	
 	def predict_(self, x):

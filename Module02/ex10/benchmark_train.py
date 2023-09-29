@@ -7,12 +7,13 @@ from utils.mylinearregressionmulti import MyLinearRegressionMulti
 from utils.data_spliter import data_spliter
 from datetime import datetime
 import threading
-from utils.utils import zscore, minmax
+from utils.utils import zscore, zscore_multi, minmax
 
-#Pasring
-data = pd.read_csv("../data/space_avocado.csv")
-target = (np.array(data["target"].astype(float))).reshape(-1, 1)
-target_raw = np.array(data["target"]).reshape(-1, 1)
+#Parsing
+data_raw = pd.read_csv("../data/space_avocado.csv")
+data = (np.array(data_raw[["weight","prod_distance","time_delivery","target"]]))
+target = np.array(data[:,3]).reshape(-1, 1)
+target_raw = np.array(data_raw["target"]).reshape(-1, 1)
 
 #Setting up polynomial features
 weights = []
@@ -23,12 +24,12 @@ prod_distances_raw = []
 time_deliverys_raw = []
 
 # for order in range(1, 5):
-weights = add_polynomial_features((np.array(data["weight"])).reshape(-1, 1), 4)
-prod_distances = add_polynomial_features((np.array(data["prod_distance"])).reshape(-1, 1), 4)
-time_deliverys = add_polynomial_features((np.array(data["time_delivery"])).reshape(-1, 1), 4)
-weights_raw = add_polynomial_features(np.array(data["weight"]).reshape(-1, 1), 4)
-prod_distances_raw = add_polynomial_features(np.array(data["prod_distance"]).reshape(-1, 1), 4)
-time_deliverys_raw = add_polynomial_features(np.array(data["time_delivery"]).reshape(-1, 1), 4)
+weights = add_polynomial_features((np.array(data[:,0])).reshape(-1, 1), 4)
+prod_distances = add_polynomial_features((np.array(data[:,1])).reshape(-1, 1), 4)
+time_deliverys = add_polynomial_features((np.array(data[:,2])).reshape(-1, 1), 4)
+weights_raw = add_polynomial_features(np.array(data_raw["weight"]).reshape(-1, 1), 4)
+prod_distances_raw = add_polynomial_features(np.array(data_raw["prod_distance"]).reshape(-1, 1), 4)
+time_deliverys_raw = add_polynomial_features(np.array(data_raw["time_delivery"]).reshape(-1, 1), 4)
 
 def run(y, weight, prod_distance, time_delivery, x_raw, y_raw, thetas, alpha = 0.001, nb_iter = 1000):    
 
@@ -38,11 +39,8 @@ def run(y, weight, prod_distance, time_delivery, x_raw, y_raw, thetas, alpha = 0
 
     #Training model
     lr = MyLinearRegressionMulti(thetas, alpha, nb_iter)
-    try:
-        new_thetas = lr.fit_(x_train, y_train.reshape(-1,1))
-        return round(lr.mse_(x_test, y_test.reshape(-1,1))), new_thetas
-    except Exception as error:
-        print(error, file=sys.stderr)
+    new_thetas = lr.fit_(x_train, y_train.reshape(-1,1))
+    return round(lr.mse_(x_test, y_test.reshape(-1,1))), new_thetas
         # return run(y, weight, prod_distance, time_delivery, thetas, alpha/10, nb_iter)
 
 #Open and create results file
@@ -55,20 +53,22 @@ lock = threading.Lock()
 
 def thread_function(weight_order, prod_distance_order, time_delivery_order, thetas = np.array([])):
     if thetas.shape == (0,):
-        thetas_weight = np.random.uniform(-1, 1, weight_order)
-        thetas_order = np.random.uniform(-1, 1, prod_distance_order)
-        thetas_delivery = np.random.uniform(-1, 1, time_delivery_order)
-        thetas = np.concatenate(( np.random.uniform(-1, 1, 1), thetas_weight, thetas_delivery, thetas_order)).reshape(-1, 1)
+        thetas_weight = np.random.uniform(0, 1, weight_order)
+        thetas_order = np.random.uniform(0, 1, prod_distance_order)
+        thetas_delivery = np.random.uniform(0, 1, time_delivery_order)
+        thetas = np.concatenate(( np.random.uniform(0, 1, 1), thetas_weight, thetas_delivery, thetas_order)).reshape(-1, 1)
     mse = 0
     lock.acquire()
     print("Starting ",weight_order, prod_distance_order, time_delivery_order, thetas)
     lock.release()
-    # print(thetas)
     # x_raw =[]
     x_raw = np.concatenate((weights_raw[:,:weight_order], prod_distances_raw[:,:prod_distance_order], time_deliverys_raw[:,:time_delivery_order]), axis = 1)
     
-    mse, new_thetas = run(target, weights[:,:weight_order], prod_distances[:,:prod_distance_order], time_deliverys[:,:time_delivery_order], x_raw, target_raw, thetas, 1e-8, 1000)
-    
+    try:
+        mse, new_thetas = run(target, weights[:,:weight_order], prod_distances[:,:prod_distance_order], time_deliverys[:,:time_delivery_order], x_raw, target_raw, thetas, 1e-7, 100000)
+    except Exception as error:
+        print(error, sys.stderr)
+
     lock.acquire()
     with open(filename, "a") as file:
         print(mse, weight_order, prod_distance_order, time_delivery_order, " ".join([str(theta[0]) for theta in new_thetas]),sep=",",file=file)

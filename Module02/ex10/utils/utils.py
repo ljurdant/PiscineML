@@ -70,6 +70,18 @@ def zscore(x):
     ts = TinyStatistician()
     if ts.mean(x) and ts.std(x):
         return (x - ts.mean(x)) / ts.std(x)
+
+def zscore_multi(x):
+    """Computes the normalized version of a non-empty numpy.ndarray using the z-score standardization.
+    Args:
+        x: has to be an numpy.ndarray.
+    Returns:
+        x' as a numpy.ndarray.
+        None if x is a non-empty numpy.ndarray or not a numpy.ndarray.
+    Raises:
+        This function shouldn't raise any Exception.
+    """
+    return (x - np.mean(x)) / np.std(x)
     
 def minmax(x):
     """Computes the normalized version of a non-empty numpy.ndarray using the min-max standardization.
@@ -81,5 +93,4 @@ def minmax(x):
     Raises:
         This function shouldn't raise any Exception.
     """    
-    if isinstance(x, np.ndarray):
-        return (x - min(x)) / (max(x) - min(x))
+    return (x - np.min(x)) / (np.max(x) - np.min(x))
