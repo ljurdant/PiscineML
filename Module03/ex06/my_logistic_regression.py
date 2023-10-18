@@ -24,7 +24,6 @@ class MyLogisticRegression():
     def loss_(self, x, y):
         try:
             y_hat = self.predict_(x)
-            print("y_hat = ", y_hat)
             return log_loss_(y, y_hat)
         except:
             return None

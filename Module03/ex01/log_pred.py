@@ -15,6 +15,8 @@ def logistic_predict_(x, theta):
         This function should not raise any Exception.
     """
     try:
+        if len(x.shape) < 2:
+            x = x.reshape(-1,1)
         x_prime = np.insert(x,0,1,axis=1)
         return sigmoid_(np.dot(x_prime, theta))
     except:

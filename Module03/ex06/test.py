@@ -11,12 +11,12 @@ mylr = MyLR(thetas)
 # [1. ],
 # [1. ]])
 # Example 1:
-print(mylr.loss_(X,Y))
+print("Loss before fitting:",mylr.loss_(X,Y))
 # Output:
 # 11.513157421577004
 # Example 2:
 mylr.fit_(X, Y)
-print(mylr.theta)
+print("Theta after fitting:",mylr.theta)
 # Output:
 # array([[ 2.11826435]
 # [ 0.10154334]
@@ -24,12 +24,12 @@ print(mylr.theta)
 # [-5.10817488]
 # [ 0.6212541 ]])
 # Example 3:
-print(mylr.predict_(X))
+print("y_hat:",mylr.predict_(X))
 # Output:
 # array([[0.57606717]
 # [0.68599807]
 # [0.06562156]])
 # Example 4:
-print(mylr.loss_(X,Y))
+print("Loss after fitting:",mylr.loss_(X,Y))
 # Output:
 # 1.4779126923052268

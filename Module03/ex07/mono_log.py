@@ -80,14 +80,14 @@ if (zipcode != -1):
     y = planet_data["Origin"] == zipcode
     y = np.array(y.astype({"Origin": "int"})).reshape(-1, 1)
 
-    x_train, x_test, y_train, y_test = data_spliter(x, y, 0.5)
+    x_train, x_test, y_train, y_test = data_spliter(x, y, 0.7)
     # print(zscore(x_train[:,0]))
     # x_train = np.concatenate((minmax(x_train[:,0]).reshape(-1,1), minmax(x_train[:,1]).reshape(-1,1), (x_train[:,2]).reshape(-1,1)), axis=1)
     # x_train = minmax(x_train)
     # print(x_train)
     thetas = np.array([[10.0],[1],[1],[1]])
 
-    myLr = MyLogisticRegression(thetas, max_iter=100000)
+    myLr = MyLogisticRegression(thetas, max_iter=1000000)
     myLr.fit_(x_train, y_train.reshape(-1, 1))
     print("Thetas = ",myLr.theta)
     # print(x_train)

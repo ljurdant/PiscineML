@@ -14,10 +14,16 @@ def vec_log_loss_(y, y_hat, eps=1e-15):
     Raises:
         This function should not raise any Exception.
     """
+    def zero_to_eps(x):
+        if x[0] == 0:
+            return eps
+        else:
+            return x
 
     try:
-        y_eps = np.apply_along_axis(lambda x: (x[0], eps)[x[0] == 0], 1, y )
-        y_hat_eps = np.apply_along_axis(lambda x: (x[0], eps)[x[0] == 1],1, y_hat)
-        return - (np.dot(y_eps,np.log(y_hat_eps)) + np.dot((1 - y_eps),np.log(1 - y_hat_eps))) / max(y.shape)
+        y_hat_eps = np.apply_along_axis(zero_to_eps,1, y_hat).flatten()
+        y_hat_eps_inv = np.apply_along_axis(zero_to_eps,1, np.array(1 - y_hat, dtype=float)).flatten()
+        y = y.flatten()
+        return - (np.dot(y,np.log(y_hat_eps)) + np.dot(1 - y,np.log(y_hat_eps_inv))) / y.shape[0]
     except:
         return None
