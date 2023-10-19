@@ -24,6 +24,6 @@ def vec_log_loss_(y, y_hat, eps=1e-15):
         y_hat_eps = np.apply_along_axis(zero_to_eps,1, np.array(y_hat, dtype=float))
         y_hat_eps_inv = np.apply_along_axis(zero_to_eps,1, np.array(1 - y_hat, dtype=float))
         y = y.flatten()
-        return - (np.dot(y,np.log(y_hat_eps)) + np.dot(1 - y,np.log(y_hat_eps_inv))) / y.shape[0]
+        return -((np.dot(y,np.log(y_hat_eps)) + np.dot(1 - y,np.log(y_hat_eps_inv))))[0] / y.shape[0]
     except:
         return None
