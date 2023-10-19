@@ -29,12 +29,10 @@ def log_loss_(y, y_hat, eps=1e-15):
             y = y.reshape(-1, 1)
         if len(y_hat.shape) < 2:
             y_hat = y_hat.reshape(-1, 1)
-        y_hat_eps = np.apply_along_axis(zero_to_eps, 1, np.array(y_hat, dtype=float))
-        y_hat_eps_inv = np.apply_along_axis(zero_to_eps, 1, np.array(1 - y_hat, dtype=float))
-        y_eps =  np.apply_along_axis(zero_to_eps, 1, np.array(y, dtype=float))
-        y_eps_inv =  np.apply_along_axis(zero_to_eps, 1, np.array(1 - y_eps, dtype=float))
-
-        return - np.sum(y * np.log(y_hat_eps) + y_eps_inv * np.log(y_hat_eps_inv)) / y.shape[0]
+        y_hat_eps = np.apply_along_axis(zero_to_eps, 1, np.array(y_hat, dtype=float)).reshape(-1,1)
+        y_hat_eps_inv = np.apply_along_axis(zero_to_eps, 1, np.array(1 - y_hat, dtype=float)).reshape(-1,1)
+        return - np.sum(y * np.log(y_hat_eps) + (1 - y) * np.log(y_hat_eps_inv)) / y.shape[0]
+        
     except Exception as error:
         print(error)
         return None

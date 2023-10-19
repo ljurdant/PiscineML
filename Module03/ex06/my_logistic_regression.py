@@ -2,7 +2,7 @@ import numpy as np
 
 from log_pred import logistic_predict_
 from vec_log_gradient import vec_log_gradient
-from log_loss import log_loss_
+from vec_log_loss import vec_log_loss_
 
 
 class MyLogisticRegression():
@@ -24,7 +24,7 @@ class MyLogisticRegression():
     def loss_(self, x, y):
         try:
             y_hat = self.predict_(x)
-            return log_loss_(y, y_hat)
+            return vec_log_loss_(y, y_hat)
         except:
             return None
     

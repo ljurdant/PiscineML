@@ -16,6 +16,10 @@ def vec_log_gradient(x, y, theta):
         This function should not raise any Exception.
     """
     try:
+        if len(x.shape) == 1:
+            x = x.reshape(-1,1)
+        if len(y.shape) == 1:
+            x = x.reshape(-1,1)
         x_prime_T = np.transpose(np.insert(x,0,1,axis=1))
         return np.dot(x_prime_T,(logistic_predict_(x, theta) - y)) / x.shape[0]
     except:

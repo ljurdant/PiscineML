@@ -24,12 +24,12 @@ def log_gradient(x, y, theta):
         if len(x.shape) == 1:
             x = x.reshape(-1,1)
         if len(y.shape) == 1:
-            x = x.reshape(-1,1)
+            y = y.reshape(-1,1)
         J = sum([(logistic_predict_(x[i].reshape(1,-1), theta) - y[i])
                         for i in range(y.shape[0])]) / x.shape[0]
         for j in range(1, theta.shape[0]):
             J = np.append(J, sum([(logistic_predict_(x[i].reshape(1,-1), theta) - y[i])*x[i][j - 1]
-                        for i in range(y.shape[0])]) / x.shape[0], axis=1)
+                        for i in range(y.shape[0])]) / x.shape[0], axis=0)
         return J
     except:
         return None
