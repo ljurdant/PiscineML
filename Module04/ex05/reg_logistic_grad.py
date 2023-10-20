@@ -1,14 +1,30 @@
 import numpy as np
 
+def sigmoid_(x):
+    """
+    Compute the sigmoid of a vector.
+    Args:
+        x: has to be a numpy.ndarray of shape (m, 1).
+    Returns:
+        The sigmoid value as a numpy.ndarray of shape (m, 1).
+        None if x is an empty numpy.ndarray.
+    Raises:
+        This function should not raise any Exception.
+    """
+    try:
+        return 1/(1 + np.exp(x*(-1)))
+    except:
+        return None
+
 def h(x, thetas):
     thetas = thetas.flatten()
     
     y_hat = thetas[0]
     y_hat += sum([x_value*theta for x_value, theta in zip(x, thetas[1:])])
-    return y_hat
+    return sigmoid_(y_hat)
 
-def reg_linear_grad(y, x, theta, lambda_):
-    """Computes the regularized linear gradient of three non-empty numpy.ndarray,
+def reg_logistic_grad(y, x, theta, lambda_):
+    """Computes the regularized logistic gradient of three non-empty numpy.ndarray,
     with two for-loop. The three arrays must have compatible shapes.
     Args:
         y: has to be a numpy.ndarray, a vector of shape m * 1.
@@ -37,16 +53,15 @@ def reg_linear_grad(y, x, theta, lambda_):
         return Js
     except:
         return None
-    
+
 def h_vec(x, thetas):
-    x_prime = np.insert(x, 0, 1, axis=1)
-    y_hat = np.matmul(x_prime, thetas)
-    return y_hat
- 
+    if len(x.shape) < 2:
+        x = x.reshape(-1,1)
+    x_prime = np.insert(x,0,1,axis=1)
+    return sigmoid_(np.dot(x_prime, thetas))
 
-
-def vec_reg_linear_grad(y, x, theta, lambda_):
-    """Computes the regularized linear gradient of three non-empty numpy.ndarray,
+def vec_reg_logistic_grad(y, x, theta, lambda_):
+    """Computes the regularized logistic gradient of three non-empty numpy.ndarray,
     without any for-loop. The three arrays must have compatible shapes.
     Args:
         y: has to be a numpy.ndarray, a vector of shape m * 1.
