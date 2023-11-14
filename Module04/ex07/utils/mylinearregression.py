@@ -56,22 +56,17 @@ class MyLinearRegression():
 			This function should not raise any Exception.
 		"""
 		
-		#Format checks
-		if (type(self.gradient(x, y)) == type(None)):
-			return None
-		try :
-			range(self.max_iter)
+		try:
+			#Fitting
+			for _ in range(self.max_iter):
+				deltaJ = self.gradient(x, y)
+				# print(deltaJ, theta)
+				self.thetas = self.thetas - self.alpha * deltaJ
+
+			return self.thetas
 		except Exception as err:
 			print(err, file=sys.stderr)
 			return None
-
-		#Fitting
-		for _ in range(self.max_iter):
-			deltaJ = self.gradient(x, y)
-			# print(deltaJ, theta)
-			self.thetas = self.thetas - self.alpha * deltaJ
-
-		return self.thetas
 	
 	def predict_(self, x):
 		"""Computes the prediction vector y_hat from two non-empty numpy.array.
@@ -134,5 +129,5 @@ class MyLinearRegression():
 		"""
 		J_elem = self.loss_elem_(y, y_hat)
 		if not isinstance(J_elem, type(None)):
-			return np.mean(J_elem) / 2
+			return np.mean(J_elem.flatten()) / 2
 	

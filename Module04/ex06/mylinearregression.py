@@ -30,7 +30,9 @@ class MyLinearRegression():
 
 		try:
 			x_prime = np.insert(x,0,1,axis=1)
-			return 1 / x.shape[0] * np.matmul(x_prime.transpose(),np.matmul(x_prime,self.thetas) - y)
+			# print(np.matmul(x_prime,self.thetas))
+			# print((np.matmul(x_prime,self.thetas) - y))
+			return 1 / x.shape[0] * np.matmul(x_prime.transpose(),(np.matmul(x_prime,self.thetas) - y))
 		except Exception as err:
 			print(err, file=sys.stderr)
 			return None
@@ -65,12 +67,15 @@ class MyLinearRegression():
 			print(err, file=sys.stderr)
 			return None
 
+		mse = self.mse_(x,y)
 		#Fitting
 		for _ in range(self.max_iter):
 			deltaJ = self.gradient(x, y)
-			# print(deltaJ, theta)
-			self.thetas = self.thetas - self.alpha * deltaJ
-
+			thetas = self.thetas - self.alpha * deltaJ
+			self.thetas = thetas
+			if self.mse_(x,y) > mse:
+				break
+		
 		return self.thetas
 	
 	def predict_(self, x):
@@ -135,4 +140,8 @@ class MyLinearRegression():
 		J_elem = self.loss_elem_(y, y_hat)
 		if not isinstance(J_elem, type(None)):
 			return np.mean(J_elem) / 2
+		
+	def mse_(self, x, y):
+		y_hat = self.predict_(x)
+		return np.mean((y_hat - y)**2)
 	
