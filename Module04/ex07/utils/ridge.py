@@ -15,8 +15,6 @@ class myRidge(MyLinearRegression):
     def loss_(self, y, y_hat):
         sub = (y_hat - y).flatten()
         return (np.dot(sub, sub) + self.lambda_*l2(self.thetas))  / sub.shape[0] * 0.5
-    
-    
 
     def gradient(self, x, y):
         theta_prime = np.array(self.thetas)

@@ -59,9 +59,12 @@ class MyLinearRegression():
 		try:
 			#Fitting
 			for _ in range(self.max_iter):
+				loss = self.loss_(y, self.predict_(x))
 				deltaJ = self.gradient(x, y)
-				# print(deltaJ, theta)
 				self.thetas = self.thetas - self.alpha * deltaJ
+				new_loss = self.loss_(y, self.predict_(x))
+				# if loss < new_loss:
+					# raise Exception("Divergent")
 
 			return self.thetas
 		except Exception as err:
