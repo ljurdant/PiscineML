@@ -30,7 +30,8 @@ class MyLinearRegression():
 
 		try:
 			x_prime = np.insert(x,0,1,axis=1)
-			return 1 / x.shape[0] * np.matmul(x_prime.transpose(),np.matmul(x_prime,self.thetas) - y)
+			gradient = 1 / x.shape[0] * x_prime.T @ (x_prime @ self.thetas - y)
+			return gradient
 		except Exception as err:
 			print(err, file=sys.stderr)
 			return None
@@ -59,10 +60,8 @@ class MyLinearRegression():
 		try:
 			#Fitting
 			for _ in range(self.max_iter):
-				loss = self.loss_(y, self.predict_(x))
-				deltaJ = self.gradient(x, y)
+				deltaJ = self.gradient_(x, y)
 				self.thetas = self.thetas - self.alpha * deltaJ
-				new_loss = self.loss_(y, self.predict_(x))
 				# if loss < new_loss:
 					# raise Exception("Divergent")
 
