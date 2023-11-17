@@ -24,7 +24,6 @@ def plot_comparison(weight_order, prod_distance_order, time_delivery_order, thet
 
     lr = myRidge(thetas, lambda_=lambda_)
     y_hat = lr.predict_(x)
-
     fig, axs = plt.subplots(3, 2,sharey="row")
     fig.subplots_adjust(hspace=.5)
     fig.subplots_adjust(wspace=0)
@@ -47,5 +46,17 @@ if len(sys.argv) >= 2:
     model_data = pd.read_csv(model_filename)
     model_data = model_data.sort_values(by=["loss"], key = lambda s: s.astype(float))
 
-    thetas = np.array([float(theta)for theta in model_data.iloc[0]["thetas"].split()]).reshape(-1, 1)
-    plot_comparison(model_data.iloc[0]["weight_order"],model_data.iloc[0]["prod_distance_order"],model_data.iloc[0]["time_delivery_order"], thetas, model_data.iloc[0]["lambda"])
+    for i in range(2):
+
+        thetas = np.array([float(theta)for theta in model_data.iloc[i]["thetas"].split()]).reshape(-1, 1)
+        weight_order = model_data.iloc[i]["weight_order"]
+        prod_distance_order = model_data.iloc[i]["prod_distance_order"]
+        time_delivery_order = model_data.iloc[i]["time_delivery_order"]
+        print(weight_order, prod_distance_order, time_delivery_order,model_data.iloc[i]["lambda"], " => ",model_data.iloc[i]["loss"])
+        plot_comparison(weight_order,prod_distance_order,time_delivery_order, thetas, model_data.iloc[i]["lambda"])
+
+    lambdas = [0,0.2,0.4,0.6,0.8,1.0]
+
+
+    
+

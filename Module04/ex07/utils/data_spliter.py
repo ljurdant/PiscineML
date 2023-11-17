@@ -21,7 +21,7 @@ def data_spliter(x, y, proportion):
 
     try:
         total = np.append(x, y, axis=1)
-        # np.random.shuffle(total[:])
+        np.random.shuffle(total[:])
         y_total = total[:,-1]
         x_total = total[:,:-1]
         split_index = int(proportion*x_total.shape[0])

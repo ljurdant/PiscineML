@@ -40,9 +40,19 @@ class myRidge(MyLinearRegression):
             ValueError: If there is a dimension problem.
         """
         try:
+            prev_val_loss = float('inf')  # Initialize with a large value
+            
             for _ in range(self.max_iter):
                 deltaJ = self.gradient_(x, y)
                 self.thetas = self.thetas - self.alpha * deltaJ
+                val_loss = self.loss_(y, self.predict_(x))
+                # Check for early stopping
+                if val_loss > prev_val_loss:
+                    print("Early stopping: Validation loss increased.")
+                    break
+                prev_val_loss = val_loss
+
+
             return self.thetas
         except ValueError as ve:
             print(f"ValueError in fit_: {ve}")
