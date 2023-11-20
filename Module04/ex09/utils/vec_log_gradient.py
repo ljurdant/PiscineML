@@ -1,7 +1,7 @@
 
 import numpy as np
 
-from log_pred import logistic_predict_
+from utils.log_pred import logistic_predict_
 
 def vec_log_gradient(x, y, theta):
     """Computes a gradient vector from three non-empty numpy.ndarray, without any for-loop. The three arrays must have compArgs:

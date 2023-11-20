@@ -1,4 +1,4 @@
-from Module04.ex09.my_logistic_regression import MyLogisticRegression as mylogr
+from Module04.ex09.utils.my_logistic_regression import MyLogisticRegression as mylogr
 import numpy as np
 
 

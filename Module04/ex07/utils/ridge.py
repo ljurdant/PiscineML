@@ -3,6 +3,7 @@ from utils.mylinearregression import MyLinearRegression
 from utils.l2_reg import l2
 from scipy.sparse.linalg import lsqr
 
+
 class myRidge(MyLinearRegression):
     def __init__(self, thetas, alpha=0.001, max_iter=1000, lambda_=0.5):
         """
@@ -11,6 +12,8 @@ class myRidge(MyLinearRegression):
         """
         super().__init__(thetas, alpha, max_iter)
         self.lambda_ = lambda_
+        self.losses = []
+        
 
     def loss_(self, y, y_hat):
         sub = (y_hat - y).flatten()
@@ -45,13 +48,15 @@ class myRidge(MyLinearRegression):
             
             for _ in range(self.max_iter):
                 deltaJ = self.gradient_(x, y)
-                self.thetas = self.thetas - self.alpha * deltaJ
-                print("deltaJ = ",deltaJ)
+                self.thetas -= self.alpha * deltaJ
+                # print("deltaJ = ",deltaJ*self.alpha)
                 val_loss = self.loss_(y, self.predict_(x))
                 # Check for early stopping
+                # self.losses.append(val_loss)
                 if val_loss > prev_val_loss:
                     print("Early stopping: Validation loss increased.")
-                    break
+                    return np.array([])
+                
                 prev_val_loss = val_loss
 
 

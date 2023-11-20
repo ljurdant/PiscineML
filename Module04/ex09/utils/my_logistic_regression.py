@@ -1,9 +1,9 @@
 import numpy as np
 
-from log_pred import logistic_predict_
-from vec_log_gradient import vec_log_gradient
-from vec_log_loss import vec_log_loss_
-from reg_logistic_grad import vec_reg_logistic_grad
+from utils.log_pred import logistic_predict_
+from utils.vec_log_gradient import vec_log_gradient
+from utils.vec_log_loss import vec_log_loss_
+from utils.reg_logistic_grad import vec_reg_logistic_grad
 import sys
 
 

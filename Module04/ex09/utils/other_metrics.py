@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 
 def accuracy_score_(y, y_hat):
     """
@@ -37,8 +38,11 @@ def precision_score_(y, y_hat, pos_label=1):
         fp = np.logical_and(y_hat == pos_label, y != y_hat)
         tp_count = np.count_nonzero(tp)
         fp_count = np.count_nonzero(fp)
+        if (tp_count + fp_count) == 0:
+            return 0
         return tp_count / (tp_count + fp_count)
-    except:
+    except Exception as error:
+        print(f"{error} in function {__name__}", file=sys.stderr)
         return None
 
 def recall_score_(y, y_hat, pos_label=1):
@@ -59,8 +63,11 @@ def recall_score_(y, y_hat, pos_label=1):
         fn = np.logical_and(y_hat != pos_label, y != y_hat)
         tp_count = np.count_nonzero(tp)
         fn_count = np.count_nonzero(fn)
+        if (tp_count + fn_count) == 0:
+            return 0
         return tp_count / (tp_count + fn_count)
-    except:
+    except Exception as error:
+        print(f"{error} in function {__name__}", file=sys.stderr)
         return None
     
 
@@ -82,6 +89,9 @@ def f1_score_(y, y_hat, pos_label=1):
     recall = recall_score_(y, y_hat, pos_label)
     
     try:
+        if precision + recall == 0:
+            return 0
         return (2*precision*recall) / (precision + recall)
-    except:
+    except Exception as error:
+        print(f"{error} in function {__name__}", file=sys.stderr)
         return None

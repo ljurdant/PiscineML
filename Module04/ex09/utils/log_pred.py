@@ -1,5 +1,5 @@
 
-from sigmoid import sigmoid_
+from utils.sigmoid import sigmoid_
 import numpy as np
 
 def logistic_predict_(x, theta):
