@@ -10,5 +10,6 @@ def zscore(x):
     Raises:
         This function shouldn't raise any Exception.
     """
+    # print(x)
     if np.mean(x) and np.std(x):
         return (x - np.mean(x)) / np.std(x)

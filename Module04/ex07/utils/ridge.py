@@ -1,6 +1,7 @@
 import numpy as np
 from utils.mylinearregression import MyLinearRegression
 from utils.l2_reg import l2
+from scipy.sparse.linalg import lsqr
 
 class myRidge(MyLinearRegression):
     def __init__(self, thetas, alpha=0.001, max_iter=1000, lambda_=0.5):
@@ -45,6 +46,7 @@ class myRidge(MyLinearRegression):
             for _ in range(self.max_iter):
                 deltaJ = self.gradient_(x, y)
                 self.thetas = self.thetas - self.alpha * deltaJ
+                print("deltaJ = ",deltaJ)
                 val_loss = self.loss_(y, self.predict_(x))
                 # Check for early stopping
                 if val_loss > prev_val_loss:
