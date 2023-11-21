@@ -62,47 +62,48 @@ def thread_function(weight_order, height_order, bone_density_order, lambda_):
 
     models.append([f1_score, weight_order, height_order, bone_density_order, lambda_])
 
-solar_data = pd.read_csv("../data/solar_system_census.csv")
-planet_data = pd.read_csv("../data/solar_system_census_planets.csv")
-
-y = planet_data["Origin"]
-y = np.array(y.astype({"Origin": "int"})).reshape(-1, 1)
+if __name__ == '__main__':
 
 
-weights = add_polynomial_features(zscore(np.array(solar_data["weight"])).reshape(-1,1), 3)
-heights = add_polynomial_features(zscore(np.array(solar_data["height"])).reshape(-1,1), 3)
-bone_densitys = add_polynomial_features(zscore(np.array(solar_data["bone_density"])).reshape(-1,1), 3)
+    solar_data = pd.read_csv("../data/solar_system_census.csv")
+    planet_data = pd.read_csv("../data/solar_system_census_planets.csv")
 
-x = np.concatenate((weights, heights, bone_densitys), axis=1)
-
-x_train, x_test, y_train, y_test = data_spliter(x, y, 0.7)
-
-models = []
-threads = []
-lock = threading.Lock()
+    y = planet_data["Origin"]
+    y = np.array(y.astype({"Origin": "int"})).reshape(-1, 1)
 
 
+    weights = add_polynomial_features(zscore(np.array(solar_data["weight"])).reshape(-1,1), 3)
+    heights = add_polynomial_features(zscore(np.array(solar_data["height"])).reshape(-1,1), 3)
+    bone_densitys = add_polynomial_features(zscore(np.array(solar_data["bone_density"])).reshape(-1,1), 3)
 
-for weight_order in range(1, 4):
-    for height_order in range(1,4):
-        for bone_density_order in range(1,4):
-            for lambda_ in [0.0, 1.0]:
-                thread = threading.Thread(target=thread_function, args=(weight_order, height_order, bone_density_order, lambda_))
-                threads.append(thread)
-                thread.start()
+    x = np.concatenate((weights, heights, bone_densitys), axis=1)
 
-for thread in threads:
-    thread.join()
+    x_train, x_test, y_train, y_test = data_spliter(x, y, 0.7)
 
-now = datetime.now()
-filename = "models/model_"+now.strftime("%m_%d_%H:%M:%S")+".csv"
+    lock = threading.Lock()
+    models = []
+    threads = []
 
-f = open(filename, "x")
-print("f1score,f1scores,weight_order,height_order,bone_density_order,lambda", file=f)
-f.close()
+    for weight_order in range(1, 4):
+        for height_order in range(1,4):
+            for bone_density_order in range(1,4):
+                for lambda_ in [0.0, 1.0]:
+                    thread = threading.Thread(target=thread_function, args=(weight_order, height_order, bone_density_order, lambda_))
+                    threads.append(thread)
+                    thread.start()
 
-models.sort(key= lambda x: (x[1],x[2],x[3],x[4]))
-for model in models:
-    [f1score, weight_order, height_order, bone_density_order, lambda_] = model
-    with open(filename, "a") as file:
-        print(np.mean(f1score),"|".join(str(round(score, 3)) for score in f1score), weight_order, height_order, bone_density_order,lambda_,sep=",",file=file)
+    for thread in threads:
+        thread.join()
+
+    now = datetime.now()
+    filename = "models/model_"+now.strftime("%m_%d_%H:%M:%S")+".csv"
+
+    f = open(filename, "x")
+    print("f1score,f1scores,weight_order,height_order,bone_density_order,lambda", file=f)
+    f.close()
+
+    models.sort(key= lambda x: (x[1],x[2],x[3],x[4]))
+    for model in models:
+        [f1score, weight_order, height_order, bone_density_order, lambda_] = model
+        with open(filename, "a") as file:
+            print(np.mean(f1score),"|".join(str(round(score, 3)) for score in f1score), weight_order, height_order, bone_density_order,lambda_,sep=",",file=file)
