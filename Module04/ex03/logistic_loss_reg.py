@@ -17,8 +17,13 @@ def reg_log_loss_(y, y_hat, theta, lambda_):
     """
     eps = 1e-15
 
-    y = np.apply_along_axis(lambda x: (eps, x)[x[0] != 0], 0, y)
-    y_hat = np.apply_along_axis(lambda x: (eps, x)[x[0] != 0], 0, y_hat)
+    
+    y = np.array(y).reshape(-1,1)
+    y_hat = np.array(y_hat).reshape(-1,1)
+    theta = np.array(theta).reshape(-1,1)
+
+    y = np.apply_along_axis(lambda x: (eps, x)[x[0] != 0], 1, y)
+    y_hat = np.apply_along_axis(lambda x: (eps, x[0])[x[0] != 0], 1, y_hat)
 
     y = y.flatten()
     y_hat = y_hat.flatten()
